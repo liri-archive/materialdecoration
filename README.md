@@ -5,9 +5,9 @@ Material Decoration
 
 [![License](https://img.shields.io/badge/license-LGPLv3.0-blue.svg)](http://www.gnu.org/licenses/lgpl.txt)
 [![GitHub release](https://img.shields.io/github/release/lirios/material-decoration.svg)](https://github.com/lirios/material-decoration)
-[![Build Status](https://travis-ci.org/lirios/material-decoration.svg?branch=develop)](https://travis-ci.org/lirios/material-decoration)
+[![Build Status](https://travis-ci.org/lirios/material-decoration.svg?branch=master)](https://travis-ci.org/lirios/material-decoration)
 [![GitHub issues](https://img.shields.io/github/issues/lirios/material-decoration.svg)](https://github.com/lirios/material-decoration/issues)
-[![Maintained](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/lirios/material-decoration/commits/develop)
+[![Maintained](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/lirios/material-decoration/commits/master)
 
 Client-side decoration for Qt applications on Wayland.
 
