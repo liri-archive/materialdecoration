@@ -3,7 +3,7 @@ import qbs 1.0
 Project {
     name: "MaterialDecoration"
 
-    readonly property string version: "0.0.0"
+    readonly property string version: "1.0.0"
 
     readonly property string minimumQtVersion: "5.8.0"
 
