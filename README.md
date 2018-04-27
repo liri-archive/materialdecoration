@@ -4,10 +4,10 @@ Material Decoration
 [![ZenHub.io](https://img.shields.io/badge/supercharged%20by-zenhub.io-blue.svg)](https://zenhub.io)
 
 [![License](https://img.shields.io/badge/license-LGPLv3.0-blue.svg)](http://www.gnu.org/licenses/lgpl.txt)
-[![GitHub release](https://img.shields.io/github/release/lirios/material-decoration.svg)](https://github.com/lirios/material-decoration)
-[![Build Status](https://travis-ci.org/lirios/material-decoration.svg?branch=master)](https://travis-ci.org/lirios/material-decoration)
-[![GitHub issues](https://img.shields.io/github/issues/lirios/material-decoration.svg)](https://github.com/lirios/material-decoration/issues)
-[![Maintained](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/lirios/material-decoration/commits/master)
+[![GitHub release](https://img.shields.io/github/release/lirios/materialdecoration.svg)](https://github.com/lirios/materialdecoration)
+[![Build Status](https://travis-ci.org/lirios/materialdecoration.svg?branch=master)](https://travis-ci.org/lirios/materialdecoration)
+[![GitHub issues](https://img.shields.io/github/issues/lirios/materialdecoration.svg)](https://github.com/lirios/materialdecoration/issues)
+[![Maintained](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/lirios/materialdecoration/commits/master)
 
 Client-side decoration for Qt applications on Wayland.
 
