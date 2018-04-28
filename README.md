@@ -11,6 +11,8 @@ Material Decoration
 
 Client-side decoration for Qt applications on Wayland.
 
+This plugin extends Qt hence you have to rebuild it every time Qt is updated.
+
 ## Dependencies
 
 Qt >= 5.8.0 with at least the following modules is required:
