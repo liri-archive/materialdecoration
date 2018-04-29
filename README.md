@@ -1,8 +1,6 @@
 Material Decoration
 ===================
 
-[![ZenHub.io](https://img.shields.io/badge/supercharged%20by-zenhub.io-blue.svg)](https://zenhub.io)
-
 [![License](https://img.shields.io/badge/license-LGPLv3.0-blue.svg)](http://www.gnu.org/licenses/lgpl.txt)
 [![GitHub release](https://img.shields.io/github/release/lirios/materialdecoration.svg)](https://github.com/lirios/materialdecoration)
 [![Build Status](https://travis-ci.org/lirios/materialdecoration.svg?branch=master)](https://travis-ci.org/lirios/materialdecoration)
@@ -10,6 +8,8 @@ Material Decoration
 [![Maintained](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/lirios/materialdecoration/commits/master)
 
 Client-side decoration for Qt applications on Wayland.
+
+This plugin extends Qt hence you have to rebuild it every time Qt is updated.
 
 ## Dependencies
 
