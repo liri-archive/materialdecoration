@@ -36,8 +36,6 @@
 
 QT_BEGIN_NAMESPACE
 
-inline void initResources() { Q_INIT_RESOURCE(material); }
-
 namespace QtWaylandClient {
 
 #define BUTTON_WIDTH dp(24)
@@ -53,8 +51,6 @@ QWaylandMaterialDecoration::QWaylandMaterialDecoration()
     , m_iconColor("#b4ffffff")
     , m_textColor("#ffffff")
 {
-    initResources();
-
     QTextOption option(Qt::AlignHCenter | Qt::AlignVCenter);
     option.setWrapMode(QTextOption::NoWrap);
     m_windowTitle.setTextOption(option);
@@ -207,27 +203,68 @@ void QWaylandMaterialDecoration::paint(QPaintDevice *device)
         p.restore();
     }
 
-    p.save();
-    p.setPen(m_iconColor);
+    // Buttons
+    {
+        QRectF rect;
+        QPen pen(m_iconColor);
+        p.setPen(pen);
 
-    // Close button
-    QBitmap closeIcon = buttonIcon("window-close");
-    p.drawPixmap(closeButtonRect(), closeIcon, closeIcon.rect());
+        // Close button
+        p.save();
+        rect = closeButtonRect();
+        qreal crossSize = rect.height() / 2.3;
+        QPointF crossCenter(rect.center());
+        QRectF crossRect(crossCenter.x() - crossSize / 2, crossCenter.y() - crossSize / 2, crossSize, crossSize);
+        pen.setWidth(2);
+        p.setPen(pen);
+        p.drawLine(crossRect.topLeft(), crossRect.bottomRight());
+        p.drawLine(crossRect.bottomLeft(), crossRect.topRight());
+        p.restore();
 
-    // Maximize button
-    if (isMaximizeable()) {
-        QBitmap maximizeIcon =
-                buttonIcon(window()->windowStates() & Qt::WindowMaximized ? "window-restore" : "window-maximize");
-        p.drawPixmap(maximizeButtonRect(), maximizeIcon, maximizeIcon.rect());
+        // Maximize button
+        if (isMaximizeable()) {
+            p.save();
+            pen.setWidth(2);
+            p.setPen(pen);
+            if (window()->windowStates() & Qt::WindowMaximized) {
+                p.setRenderHint(QPainter::Antialiasing, true);
+
+                rect = maximizeButtonRect().adjusted(4, 5, -4, -5);
+
+                qreal inset = 4;
+                QRectF rect1 = rect.adjusted(inset, 0, 0, -inset);
+                QRectF rect2 = rect.adjusted(0, inset, -inset, 0);
+                p.drawRect(rect1);
+                p.setBrush(m_backgroundColor); // need to cover up some lines from the other rect
+                p.drawRect(rect2);
+                p.drawLine(rect2.topLeft() + QPointF(2, 2), rect2.topRight() + QPointF(-2, 2));
+            } else {
+                p.setRenderHint(QPainter::Antialiasing, false);
+
+                rect = maximizeButtonRect().adjusted(5, 5, -5, -5);
+
+                QVector<QLineF> lines;
+                lines.append(QLineF(rect.topLeft(), rect.topRight()));
+                lines.append(QLineF(rect.left(), rect.top() + 2, rect.left(), rect.bottom() - 2));
+                lines.append(QLineF(rect.right(), rect.top() + 2, rect.right(), rect.bottom() - 2));
+                lines.append(QLineF(rect.bottomLeft(), rect.bottomRight()));
+                lines.append(QLineF(rect.left() + 2, rect.top() + 2, rect.right() - 2, rect.top() + 2));
+                p.drawLines(lines);
+            }
+            p.restore();
+        }
+
+        // Minimize button
+        if (window()->flags() & Qt::WindowMinimizeButtonHint) {
+            p.save();
+            p.setRenderHint(QPainter::Antialiasing, false);
+            rect = minimizeButtonRect().adjusted(5, 5, -5, -5);
+            pen.setWidth(2);
+            p.setPen(pen);
+            p.drawLine(rect.bottomLeft(), rect.bottomRight());
+            p.restore();
+        }
     }
-
-    // Minimize button
-    if (window()->flags() & Qt::WindowMinimizeButtonHint) {
-        QBitmap minimizeIcon = buttonIcon("window-minimize");
-        p.drawPixmap(minimizeButtonRect(), minimizeIcon, minimizeIcon.rect());
-    }
-
-    p.restore();
 }
 
 bool QWaylandMaterialDecoration::clickButton(Qt::MouseButtons b, Button btn)
@@ -410,13 +447,6 @@ void QWaylandMaterialDecoration::processMouseRight(QWaylandInputDevice *inputDev
 int QWaylandMaterialDecoration::dp(int dp) const
 {
     return dp;
-}
-
-QBitmap QWaylandMaterialDecoration::buttonIcon(const QString &name) const
-{
-    QIcon icon(":/icons/" + name + ".svg");
-    QPixmap pixmap = icon.pixmap(QSize(BUTTON_WIDTH, BUTTON_WIDTH));
-    return pixmap.createMaskFromColor(QColor("black"), Qt::MaskOutColor);
 }
 
 bool QWaylandMaterialDecoration::isMaximizeable() const

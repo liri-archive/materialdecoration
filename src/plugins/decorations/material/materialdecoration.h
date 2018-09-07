@@ -104,8 +104,6 @@ private:
 
     int dp(int dp) const;
 
-    QBitmap buttonIcon(const QString &name) const;
-
     bool isMaximizeable() const;
 
     Button m_clicking;
