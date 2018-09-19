@@ -128,7 +128,7 @@ QMargins QWaylandMaterialDecoration::margins() const
     // Title bar is 32dp plus borders
     if (window() && window()->type() == Qt::Popup)
         return QMargins(0, 0, 0, 0);
-    if (waylandWindow() && (waylandWindow()->isMaximized() || waylandWindow()->isFullscreen()))
+    if (window() && ((window()->windowStates() & Qt::WindowMaximized) || (window()->windowStates() & Qt::WindowFullScreen)))
         return QMargins(0, TITLE_BAR_HEIGHT, 0, 0);
     return QMargins(WINDOW_BORDER, TITLE_BAR_HEIGHT, WINDOW_BORDER, WINDOW_BORDER);
 }
@@ -165,7 +165,7 @@ void QWaylandMaterialDecoration::paint(QPaintDevice *device)
     p.setRenderHint(QPainter::Antialiasing);
 
     // Title bar
-    int radius = waylandWindow()->isMaximized() ? 0 : dp(3);
+    int radius = window()->windowStates() & Qt::WindowMaximized ? 0 : dp(3);
     QPainterPath roundedRect;
     roundedRect.addRoundedRect(margins().left(), margins().top() - TITLE_BAR_HEIGHT,
                                frameGeometry.width() - margins().left() - margins().right(), TITLE_BAR_HEIGHT + radius * 2,
@@ -217,7 +217,7 @@ void QWaylandMaterialDecoration::paint(QPaintDevice *device)
     // Maximize button
     if (isMaximizeable()) {
         QBitmap maximizeIcon =
-                buttonIcon(waylandWindow()->isMaximized() ? "window-restore" : "window-maximize");
+                buttonIcon(window()->windowStates() & Qt::WindowMaximized ? "window-restore" : "window-maximize");
         p.drawPixmap(maximizeButtonRect(), maximizeIcon, maximizeIcon.rect());
     }
 
@@ -259,8 +259,8 @@ bool QWaylandMaterialDecoration::handleMouse(QWaylandInputDevice *inputDevice, c
             QWindowSystemInterface::handleCloseEvent(window());
     } else if (isMaximizeable() && maximizeButtonRect().contains(local)) {
         if (clickButton(b, Maximize))
-            window()->setWindowState(waylandWindow()->isMaximized() ? Qt::WindowNoState
-                                                                    : Qt::WindowMaximized);
+            window()->setWindowState(window()->windowStates() & Qt::WindowMaximized ? Qt::WindowNoState
+                                                                                    : Qt::WindowMaximized);
     } else if (minimizeButtonRect().contains(local)) {
         if (clickButton(b, Minimize))
             window()->setWindowState(Qt::WindowMinimized);
@@ -295,8 +295,8 @@ bool QWaylandMaterialDecoration::handleTouch(QWaylandInputDevice *inputDevice, c
         if (closeButtonRect().contains(local))
             QWindowSystemInterface::handleCloseEvent(window());
         else if (isMaximizeable() && maximizeButtonRect().contains(local))
-            window()->setWindowState(waylandWindow()->isMaximized() ? Qt::WindowNoState
-                                                                    : Qt::WindowMaximized);
+            window()->setWindowState(window()->windowStates() & Qt::WindowMaximized ? Qt::WindowNoState
+                                                                                    : Qt::WindowMaximized);
         else if (minimizeButtonRect().contains(local))
             window()->setWindowState(Qt::WindowMinimized);
         else if (local.y() <= margins().top())
@@ -317,15 +317,27 @@ void QWaylandMaterialDecoration::processMouseTop(QWaylandInputDevice *inputDevic
         if (local.x() <= margins().left()) {
             // top left bit
             waylandWindow()->setMouseCursor(inputDevice, Qt::SizeFDiagCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+            startResize(inputDevice, Qt::TopEdge | Qt::LeftEdge, b);
+#else
             startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_TOP_LEFT, b);
+#endif
         } else if (local.x() > window()->width() - margins().right()) {
             // top right bit
             waylandWindow()->setMouseCursor(inputDevice, Qt::SizeBDiagCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+            startResize(inputDevice, Qt::TopEdge | Qt::RightEdge, b);
+#else
             startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_TOP_RIGHT, b);
+#endif
         } else {
             // top reszie bit
             waylandWindow()->setMouseCursor(inputDevice, Qt::SplitVCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+            startResize(inputDevice, Qt::TopEdge, b);
+#else
             startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_TOP, b);
+#endif
         }
     } else {
         waylandWindow()->restoreMouseCursor(inputDevice);
@@ -342,15 +354,27 @@ void QWaylandMaterialDecoration::processMouseBottom(QWaylandInputDevice *inputDe
     if (local.x() <= margins().left()) {
         // bottom left bit
         waylandWindow()->setMouseCursor(inputDevice, Qt::SizeBDiagCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+        startResize(inputDevice, Qt::BottomEdge | Qt::LeftEdge, b);
+#else
         startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_BOTTOM_LEFT, b);
+#endif
     } else if (local.x() > window()->width() - margins().right()) {
         // bottom right bit
         waylandWindow()->setMouseCursor(inputDevice, Qt::SizeFDiagCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+        startResize(inputDevice, Qt::BottomEdge | Qt::RightEdge, b);
+#else
         startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_BOTTOM_RIGHT, b);
+#endif
     } else {
         // bottom bit
         waylandWindow()->setMouseCursor(inputDevice, Qt::SplitVCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+        startResize(inputDevice, Qt::BottomEdge, b);
+#else
         startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_BOTTOM, b);
+#endif
     }
 }
 
@@ -362,7 +386,11 @@ void QWaylandMaterialDecoration::processMouseLeft(QWaylandInputDevice *inputDevi
     Q_UNUSED(mods);
 
     waylandWindow()->setMouseCursor(inputDevice, Qt::SplitHCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    startResize(inputDevice, Qt::LeftEdge, b);
+#else
     startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_LEFT, b);
+#endif
 }
 
 void QWaylandMaterialDecoration::processMouseRight(QWaylandInputDevice *inputDevice,
@@ -372,7 +400,11 @@ void QWaylandMaterialDecoration::processMouseRight(QWaylandInputDevice *inputDev
     Q_UNUSED(local);
     Q_UNUSED(mods);
     waylandWindow()->setMouseCursor(inputDevice, Qt::SplitHCursor);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    startResize(inputDevice, Qt::RightEdge, b);
+#else
     startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_RIGHT, b);
+#endif
 }
 
 int QWaylandMaterialDecoration::dp(int dp) const
