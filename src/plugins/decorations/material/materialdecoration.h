@@ -104,6 +104,7 @@ private:
 
     int dp(int dp) const;
 
+    bool isMinimizeable() const;
     bool isMaximizeable() const;
 
     Button m_clicking;

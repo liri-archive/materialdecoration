@@ -255,7 +255,7 @@ void QWaylandMaterialDecoration::paint(QPaintDevice *device)
         }
 
         // Minimize button
-        if (window()->flags() & Qt::WindowMinimizeButtonHint) {
+        if (isMinimizeable()) {
             p.save();
             p.setRenderHint(QPainter::Antialiasing, false);
             rect = minimizeButtonRect().adjusted(5, 5, -5, -5);
@@ -447,6 +447,12 @@ void QWaylandMaterialDecoration::processMouseRight(QWaylandInputDevice *inputDev
 int QWaylandMaterialDecoration::dp(int dp) const
 {
     return dp;
+}
+
+bool QWaylandMaterialDecoration::isMinimizeable() const
+{
+    return window()->flags() & Qt::WindowMinimizeButtonHint ||
+            window()->isTopLevel();
 }
 
 bool QWaylandMaterialDecoration::isMaximizeable() const
