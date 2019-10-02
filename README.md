@@ -11,6 +11,12 @@ Client-side decoration for Qt applications on Wayland.
 
 This plugin extends Qt hence you have to rebuild it every time Qt is updated.
 
+Set `QT_WAYLAND_DECORATION=material` in the environment to see Qt applications
+using Material Design window decorations in a Wayland session.
+
+Make sure `QT_WAYLAND_DISABLE_WINDOWDECORATION` is not set, otherwise Qt will
+not use any client-side decoration.
+
 ## Dependencies
 
 Qt >= 5.8.0 with at least the following modules is required:
