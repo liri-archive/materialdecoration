@@ -5,7 +5,6 @@ Material Decoration
 [![GitHub release](https://img.shields.io/github/release/lirios/materialdecoration.svg)](https://github.com/lirios/materialdecoration)
 [![Build Status](https://travis-ci.org/lirios/materialdecoration.svg?branch=develop)](https://travis-ci.org/lirios/materialdecoration)
 [![GitHub issues](https://img.shields.io/github/issues/lirios/materialdecoration.svg)](https://github.com/lirios/materialdecoration/issues)
-[![Maintained](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/lirios/materialdecoration/commits/develop)
 
 Client-side decoration for Qt applications on Wayland.
 
