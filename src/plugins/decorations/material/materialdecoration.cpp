@@ -31,6 +31,7 @@
  ***************************************************************************/
 
 #include <QtMath>
+#include <QPainterPath>
 
 #include "materialdecoration.h"
 
