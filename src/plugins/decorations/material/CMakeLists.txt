@@ -12,3 +12,8 @@ liri_add_plugin(materialdecoration
         Qt5::WaylandClientPrivate
         Wayland::Client
 )
+
+if(${Qt5_VERSION} VERSION_GREATER "5.15.1")
+    liri_extend_target("materialdecoration"
+        LIBRARIES Qt5::XkbCommonSupport)
+endif()

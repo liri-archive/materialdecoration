@@ -29,6 +29,11 @@ find_package(Qt5 "${QT_MIN_VERSION}"
         Gui
         WaylandClient
 )
+if(${Qt5_VERSION} VERSION_GREATER "5.15.1")
+    find_package(Qt5 "${QT_MIN_VERSION}"
+        CONFIG REQUIRED
+        COMPONENTS XkbCommonSupport)
+endif()
 
 ## Add subdirectories:
 add_subdirectory(src/plugins/decorations/material)
