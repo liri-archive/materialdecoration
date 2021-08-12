@@ -6,6 +6,8 @@ Material Decoration
 [![GitHub issues](https://img.shields.io/github/issues/lirios/materialdecoration.svg)](https://github.com/lirios/materialdecoration/issues)
 [![CI](https://github.com/lirios/materialdecoration/workflows/CI/badge.svg?branch=develop)](https://github.com/lirios/materialdecoration/actions?query=workflow%3ACI)
 
+**This project has been merged into [qtintegration](https://github.com/lirios/qtintegration)**
+
 Client-side decoration for Qt applications on Wayland.
 
 This plugin extends Qt hence you have to rebuild it every time Qt is updated.
